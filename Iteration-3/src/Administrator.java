@@ -15,20 +15,22 @@ public class Administrator extends User {
 
     @Override
     public void showMenu() {
+    while(true) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome, Admin!");
         System.out.println("1. Approve Clients");
         System.out.println("2. Add Experts");
-        System.out.println("3. Manage Auctions");
-        System.out.println("4. Add ObjectsOfInterest to Instituiton");
-        System.out.println("5. Logout");
+        System.out.println("3. Add expert availability");
+        System.out.println("4. Manage Auctions");
+        System.out.println("5. Add ObjectsOfInterest to Instituiton");
+        System.out.println("6. Logout");
 
 
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        switch(choice) {
+        switch (choice) {
             case 1:
                 AdministratorAction.showUnapprovedClients();
                 System.out.println("Enter the name of the user you would like to approve (or none if you would like to exit");
@@ -52,7 +54,17 @@ public class Administrator extends User {
                 break;
             }
 
-            case 4:
+            case 3:
+                System.out.println("Enter expert's email");
+                String aemail = scanner.nextLine();
+                System.out.println("Enter expert available date");
+                String date = scanner.nextLine();
+                System.out.println("Enter expert available time");
+                String time = scanner.nextLine();
+                AdministratorAction.addExpertAvailability(aemail, date, time);
+                break;
+
+            case 5:
                 System.out.println("Enter object name");
                 String name = scanner.nextLine();
                 System.out.println("Enter object description");
@@ -66,11 +78,10 @@ public class Administrator extends User {
                 AdministratorAction.registerObject(name, description, own, false);
                 break;
 
-            case 5:
+            case 6:
                 System.out.println("Logging out");
                 return;
         }
-
-
+      }
     }
 }

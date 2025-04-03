@@ -41,4 +41,52 @@ public class ClientAction {
         }
     }
 
+    public static void showAvailableExperts() {
+        String query = "SELECT * FROM expert_availability WHERE booked = 0;";
+
+        try (Connection conn = DatabaseManage.connect();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            System.out.println("\n--- Experts available for consultation: ---");
+            boolean hasResults = false;
+            int count = 0;
+            while(rs.next()) {
+                count++;
+                hasResults = true;
+                String name = rs.getString("expert_email");
+                String date = rs.getString("available_date");
+                String time = rs.getString("available_time");
+                System.out.println(count + ". "+ name + " - " + date + " - " + time);
+            }
+            if (!hasResults) {
+                System.out.println("No objects owned by the institution.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public static void bookExpert(String email) {
+        String query = "UPDATE expert_availability SET booked = 1 WHERE expert_email = ?";
+
+        try (Connection conn = DatabaseManage.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, email);
+
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Expert booked successfully!");
+            } else {
+                System.out.println("Expert was not booked successfully");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+

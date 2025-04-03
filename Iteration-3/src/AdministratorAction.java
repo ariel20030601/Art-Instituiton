@@ -86,4 +86,39 @@ public class AdministratorAction {
         }
     }
 
+    public static void addExpertAvailability(String expertEmail, String availableDate, String availableTime) {
+        String checkExpertQuery = "SELECT 1 FROM experts WHERE email = ?";
+        String insertAvailabilityQuery = "INSERT INTO expert_availability (expert_email, available_date, available_time, booked) VALUES (?, ?, ?, 0)";
+
+        try (Connection conn = DatabaseManage.connect()) {
+            // Check if expert exists
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkExpertQuery)) {
+                checkStmt.setString(1, expertEmail);
+                ResultSet rs = checkStmt.executeQuery();
+
+                if (!rs.next()) {  // If no result, expert does not exist
+                    System.out.println(" Error: Expert with email " + expertEmail + " does not exist.");
+                    return;
+                }
+            }
+
+            // Insert availability
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertAvailabilityQuery)) {
+                insertStmt.setString(1, expertEmail);
+                insertStmt.setString(2, availableDate);  // Format: YYYY-MM-DD
+                insertStmt.setString(3, availableTime);  // Format: HH:MM
+
+                int rowsInserted = insertStmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println(" Availability added for " + expertEmail + " on " + availableDate + " at " + availableTime);
+                } else {
+                    System.out.println(" Failed to add availability.");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
