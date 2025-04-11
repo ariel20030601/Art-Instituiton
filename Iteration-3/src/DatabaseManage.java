@@ -1,4 +1,9 @@
-import java.sql.*;
+package core;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseManage {
     private static final String URL = "jdbc:sqlite:database.db";
@@ -22,6 +27,7 @@ public class DatabaseManage {
         String usersTable = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, email TEXT, password TEXT, role TEXT);";
         String clientsTable = "CREATE TABLE IF NOT EXISTS clients (id INTEGER PRIMARY KEY, email TEXT, password TEXT, affiliation TEXT, intent TEXT, approved INTEGER DEFAULT 0);";
         String expertsTable = "CREATE TABLE IF NOT EXISTS experts (id INTEGER PRIMARY KEY, email TXT, password TEXT, license_number TEXT UNIQUE, expertise TEXT);";
+        String auctionHouse = "CREATE TABLE IF NOT EXISTS auctionHouse(id INTEGER PRIMARY KEY, name TEXT, location TEXT);";
         String auctions = "CREATE TABLE IF NOT EXISTS auctions (" +
                 "    id INTEGER PRIMARY KEY," +
                 "    name TEXT," +
@@ -64,6 +70,7 @@ public class DatabaseManage {
             stmt.execute(usersTable);
             stmt.execute(clientsTable);
             stmt.execute(expertsTable);
+            stmt.execute(auctionHouse);
             stmt.execute(auctions);
             stmt.execute(serviceRequestsTable);
             stmt.execute(expertAvailabilityTable);

@@ -1,7 +1,18 @@
+package core;
+
 import java.util.Scanner;
 
 public class Menu {
     private static Scanner scanner = new Scanner(System.in);
+
+
+    public static void LogUserIn(String email, String password, int type) {
+        User loggedInUser = UserFactory.authenticateUser(email, password, type);
+        if(loggedInUser != null) {
+            System.out.println("Login Successful!");
+            loggedInUser.showMenu();
+        }
+    }
 
     public static void showLogMenu() {
         while (true) {
@@ -38,12 +49,7 @@ public class Menu {
         System.out.println("Enter password: ");
         String password = scanner.nextLine();
 
-        User loggedInUser = User.authenticateUser(email,password,type);
-        if(loggedInUser != null) {
-            System.out.println("Login Successful!");
-            loggedInUser.showMenu();
-        }
-
+        LogUserIn(email,password,type);
     }
 
     private static void signupClient() {
@@ -55,7 +61,7 @@ public class Menu {
         String affiliation = scanner.nextLine();
         System.out.println("Enter your intent for using the system");
         String intent = scanner.nextLine();
-        ClientAction.registerClient(email, password, affiliation, intent);
+        Client.registerClient(email, password, affiliation, intent);
         System.out.println("Registration Complete");
     }
 

@@ -1,3 +1,4 @@
+package core;
 
 public class Institution {
     static int MoverForObj = 0;
