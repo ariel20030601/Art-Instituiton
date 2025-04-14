@@ -8,3 +8,8 @@
 - **Rafael Maia**  
   Student ID: 40022446
 (Has been absent for past 2 weeks(since March 28th), only submitted things for iteration 1)
+
+
+Presentation Video
+
+https://youtu.be/hDg2xSQJ4CA
