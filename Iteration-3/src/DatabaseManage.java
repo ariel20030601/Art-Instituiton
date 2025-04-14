@@ -28,6 +28,7 @@ public class DatabaseManage {
         String clientsTable = "CREATE TABLE IF NOT EXISTS clients (id INTEGER PRIMARY KEY, email TEXT, password TEXT, affiliation TEXT, intent TEXT, approved INTEGER DEFAULT 0);";
         String expertsTable = "CREATE TABLE IF NOT EXISTS experts (id INTEGER PRIMARY KEY, email TXT, password TEXT, license_number TEXT UNIQUE, expertise TEXT);";
         String auctionHouse = "CREATE TABLE IF NOT EXISTS auctionHouse(id INTEGER PRIMARY KEY, name TEXT, location TEXT);";
+        String ObjectsOfInterest = "CREATE TABLE IF NOT EXISTS objectsOfInterest (id INTEGER PRIMARY KEY, name TEXT, description TEXT, owned BOOLEAN, auction boolean);";
         String auctions = "CREATE TABLE IF NOT EXISTS auctions (" +
                 "    id INTEGER PRIMARY KEY," +
                 "    name TEXT," +
@@ -71,6 +72,7 @@ public class DatabaseManage {
             stmt.execute(clientsTable);
             stmt.execute(expertsTable);
             stmt.execute(auctionHouse);
+            stmt.execute(ObjectsOfInterest);
             stmt.execute(auctions);
             stmt.execute(serviceRequestsTable);
             stmt.execute(expertAvailabilityTable);

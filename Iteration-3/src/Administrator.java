@@ -174,6 +174,8 @@ public class Administrator implements User {
         System.out.println("5. Add ObjectsOfInterest to Instituiton");
         System.out.println("6. Logout");
 
+        System.out.println("Enter your choice: ");
+
 
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -181,7 +183,7 @@ public class Administrator implements User {
         switch (choice) {
             case 1:
                 showUnapprovedClients();
-                System.out.println("Enter the name of the user you would like to approve (or none if you would like to exit");
+                System.out.println("Enter the name of the user you would like to approve (or none if you would like to exit)");
                 String email = scanner.nextLine();
                 if (email.equals("none")) {
                     break;
