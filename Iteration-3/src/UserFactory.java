@@ -33,14 +33,15 @@ public class UserFactory {
                     if(role == 2) {
                         String license_number = rs.getString("license_number");
                         String areas = rs.getString("expertise");
-                        return new Expert(email);
+                        return new Expert(email, password, license_number, areas);
                     } else {
                         String affiliation = rs.getString("affiliation");
+                        String intent = rs.getString("intent");
                         int approved = rs.getInt("approved");
                         if (approved == 0) {
                             System.out.println("User has not been approved");
                         } else if (approved == 1) {
-                            return new Client();
+                            return new Client(userEmail, Password, affiliation, intent, approved);
                         }
                     }
                 }

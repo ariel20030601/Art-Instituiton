@@ -8,10 +8,24 @@ import java.util.Scanner;
 
 public class Client implements User {
     private String affiliation;
+    private String email;
+    private String password;
+    private String intent;
+    private int approved;
+
 
     public String getAffilation() {
         return affiliation;
     }
+
+    public Client(String email, String password, String affiliation, String intent, int approved) {
+        this.email = email;
+        this.password = password;
+        this.affiliation = affiliation;
+        this.intent = intent;
+        this.approved = approved;
+    }
+
 
 
     @Override
@@ -63,6 +77,45 @@ public class Client implements User {
         }
     }
 
+    public static void searchObjectsByKeyword(String keyword) {
+        String query = "SELECT * FROM objectsOfInterest WHERE name LIKE ? OR description LIKE ?";
+
+        try (Connection conn = DatabaseManage.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            String searchPattern = "%" + keyword + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("===== Search Results =====");
+
+            boolean found = false;
+            while (rs.next()) {
+                found = true;
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                boolean owned = rs.getInt("owned") == 1;
+
+                System.out.println("Object ID: " + id);
+                System.out.println("Name: " + name);
+                System.out.println("Description: " + description);
+                System.out.println("Owned by Institution: " + (owned ? "Yes" : "No"));
+                System.out.println("-----------------------------");
+            }
+
+            if (!found) {
+                System.out.println("No objects found matching the keyword: " + keyword);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error searching for objects.");
+            e.printStackTrace();
+        }
+    }
+
     public static void showAvailableExperts() {
         String query = "SELECT * FROM expert_availability WHERE booked = 0;";
 
@@ -82,7 +135,7 @@ public class Client implements User {
                 System.out.println(count + ". " + name + " - " + date + " - " + time);
             }
             if (!hasResults) {
-                System.out.println("No objects owned by the institution.");
+                System.out.println("No experts are available for consultation at the moment.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,9 +167,9 @@ public class Client implements User {
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("Welcome, Client!");
-            System.out.println("1. View Auctions");
+            System.out.println("1. Search for Auctions");
             System.out.println("2. Request Expert Consultation");
-            System.out.println("3. View objects owned by institution");
+            System.out.println("3. Search for objects");
             System.out.println("4. Logout");
             System.out.println("Enter your choice: ");
 
@@ -125,26 +178,34 @@ public class Client implements User {
 
             switch (choice) {
                 case 1: {
-                    System.out.println("Here are where the auctions are taking place");
+                    System.out.println("Enter the name of the auction");
+                    String AuctionName = scanner.nextLine();
+                    Auction.searchAuctionsByKeyword(AuctionName);
+                    break;
                 }
 
                 case 2: {
                     showAvailableExperts();
-                    System.out.println("if you would like to book an expert, enter their email");
+                    System.out.println("if you would like to book an expert, enter their email (or if there are none, enter 0)");
                     String email = scanner.nextLine();
+                    if(email.equals("0")){
+                        break;
+                    }
                     bookExpert(email);
                     break;
 
                 }
 
                 case 3: {
-                    viewInstitutionOwnedObjects();
+                    System.out.println("Enter the name of an object");
+                    String name = scanner.nextLine();
+                    searchObjectsByKeyword(name);
                     break;
                 }
 
                 case 4: {
                     System.out.println("Logging out..");
-                    break;
+                    return;
                 }
             }
         }
